@@ -39,16 +39,21 @@
 
     // Mouse events
     // (Just for demonstrative purposes)
+    var mouseDown = false;
+
     document.body.addEventListener('mousedown', function(e){
       Server.send(e.pageX, e.pageY, 1);
+      mouseDown = true;
     }, false);
 
     document.body.addEventListener('mousemove', function(e){
-      Server.send(e.pageX, e.pageY, 1);
+      var z = (mouseDown ? 1 : 0);
+      Server.send(e.pageX, e.pageY, z);
     }, false);    
 
     document.body.addEventListener('mouseup', function(e){
       Server.send(e.pageX, e.pageY, 0);
+      mouseDown = false;
     }, false);
 
   }, false);
