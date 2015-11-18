@@ -2,13 +2,30 @@
 
 var server = location.origin.replace(/^http/, 'ws')
 var socket = new WebSocket(server);
+
+var isOpen = false;
+var buffer = [];
+
 socket.onopen = function() {
   socket.send("web");
+
+  isOpen = true;
+  if (buffer.length > 0) {
+    buffer.forEach(function(msg) {
+      socket.send(msg)
+    });
+    buffer = [];
+  }
 };
 
 window.Server = {
   send: function(x, y, z) {
-    socket.send([x,y,z].join(","));
+    var msg = [x,y,z].join(",");
+    if(isOpen) {
+      socket.send(msg);
+    } else {
+      buffer.push(msg);
+    }
   }
 };
 
