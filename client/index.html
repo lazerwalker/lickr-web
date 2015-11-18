@@ -3,15 +3,55 @@
 <head>
   <title>Lickr</title>
 
+  <meta name="viewport" content="width=device-width,user-scalable=no">
+  <style> 
+    html {
+      height: 100%;
+      width: 100%;
+    }
+  
+    body {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
   <script src="websocket.js" type="text/javascript"></script>
 </head>
 <body>
   <h1>Hello World</h1>
 
   <script>
-  window.onload = function() {
-    Server.send(30,20,1);
-  }
+  window.addEventListener('load', function() {
+    // Touch events
+    document.body.addEventListener('touchstart', function(e){
+      Server.send(e.pageX, e.pageY, 1);
+    }, false);
+
+    document.body.addEventListener('touchmove', function(e){
+      Server.send(e.pageX, e.pageY, 1);
+    }, false);    
+
+    document.body.addEventListener('touchend', function(e){
+      Server.send(e.pageX, e.pageY, 0);
+    }, false);
+
+
+    // Mouse events
+    // (Just for demonstrative purposes)
+    document.body.addEventListener('mousedown', function(e){
+      Server.send(e.pageX, e.pageY, 1);
+    }, false);
+
+    document.body.addEventListener('mousemove', function(e){
+      Server.send(e.pageX, e.pageY, 1);
+    }, false);    
+
+    document.body.addEventListener('mouseup', function(e){
+      Server.send(e.pageX, e.pageY, 0);
+    }, false);
+
+  }, false);
   </script>
 </body>
 </html>
