@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Lickr - Machine</title>
+
+  <meta name="viewport" content="width=device-width,user-scalable=no">
+  <style> 
+    html {
+      height: 100%;
+      width: 100%;
+    }
+  
+    body {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script src="websocket.js" type="text/javascript"></script>
+</head>
+<body>
+  <h1>Output</h1>
+
+  <ul>
+
+  </ul>
+
+  <script>
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      Server.socket.send('machine');
+      Server.socket.onmessage = function(e) {
+        var node = document.createElement("li");
+        node.innerHTML = new Date().toTimeString() + ": <strong>" + e.data.split(",").join(", ") + "</strong>";
+        document.body.appendChild(node);
+      }
+    }, 500);
+  }, false);
+  </script>
+</body>
+</html>

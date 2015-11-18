@@ -19,6 +19,7 @@ socket.onopen = function() {
 };
 
 window.Server = {
+  socket: socket,
   send: function(x, y, z) {
     var msg = [x,y,z].join(",");
     console.log("Sending", msg);
