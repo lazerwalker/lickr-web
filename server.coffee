@@ -15,10 +15,14 @@ wss = new WebSocketServer {server}
 wss.on 'connection', (client) ->
   client.on 'message', (message) ->
     if message is "machine"
-      machine = client
+      console.log "Connected machine"
+      if machine? then console.log "WARNING: There was already a machine connected"
+      machine = client      
     else if message is "web"
+      console.log "Connected web client"
       clients.push client
     else if client in clients and message.match(/[\d\.]+,[\d\.]+,[\d\.]+/)
+      console.log "Received: #{message}"
       machine?.send message
 
   client.on 'close', ->
