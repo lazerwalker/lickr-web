@@ -8,11 +8,11 @@
     canvas.width=size;
 
     var context = canvas.getContext('2d');
-	context.lineWidth=5;
+	context.lineWidth=8;
 
     // Touch events
     canvas.addEventListener('touchstart', function(e){
-    	coords = canvas.relMouseCoords(e);
+    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY);
     	Server.send(coords.x, coords.y, 1);
 
     	context.beginPath();
@@ -20,7 +20,7 @@
     }, false);
 
     canvas.addEventListener('touchmove', function(e){
-    	coords = canvas.relMouseCoords(e);
+    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY);
     	Server.send(coords.x, coords.y, 1);
 
     	context.lineTo(coords.x, coords.y);
@@ -28,7 +28,7 @@
     }, false);    
 
     canvas.addEventListener('touchend', function(e){
-    	coords = canvas.relMouseCoords(e);
+    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY);
     	Server.send(coords.x, coords.y, 0);
     }, false);
 
@@ -38,7 +38,7 @@
     var mouseDown = false;
 
     canvas.addEventListener('mousedown', function(e){
-    	coords = canvas.relMouseCoords(e);
+    	coords = getMousePos(canvas, e.pageX, e.pageY);
     	Server.send(coords.x, coords.y, 1);
     	mouseDown = true;
 
@@ -47,7 +47,7 @@
     }, false);
 
     canvas.addEventListener('mousemove', function(e){
-    	coords = canvas.relMouseCoords(e);
+    	coords = getMousePos(canvas, e.pageX, e.pageY);
     	var z = (mouseDown ? 1 : 0);
     	Server.send(coords.x, coords.y, z);
 
@@ -58,29 +58,17 @@
     }, false);    
 
     canvas.addEventListener('mouseup', function(e){
-    	coords = canvas.relMouseCoords(e);
+    	coords = getMousePos(canvas, e.pageX, e.pageY);
     	Server.send(coords.x, coords.y, 0);
     	mouseDown = false;
     }, false);
 
 }, false);
 
-function relMouseCoords(event){
-    var totalOffsetX = 0;
-    var totalOffsetY = 0;
-    var canvasX = 0;
-    var canvasY = 0;
-    var currentElement = this;
-
-    do{
-        totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
-        totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-    }
-    while(currentElement = currentElement.offsetParent)
-
-    canvasX = event.pageX - totalOffsetX;
-    canvasY = event.pageY - totalOffsetY;
-
-    return {x:canvasX, y:canvasY}
+function getMousePos(canvas, evX, evY) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evX - rect.left,
+      y: evY - rect.top
+  };
 }
-HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
