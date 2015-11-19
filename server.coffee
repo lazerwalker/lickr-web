@@ -20,7 +20,7 @@ wss.on 'connection', (client) ->
     else if message is "web"
       console.log "Connected web client"
       clients.push client
-    else if client in clients and message.match(/^[\d\.]+,[\d\.]+,[\d\.]+$/)
+    else if client in clients and message.match(/^[\d\-\.]+,[\d\-\.]+,[\d\-\.]+$/)
       console.log "Received: #{message}"
       machine.send message for machine in machines
 
