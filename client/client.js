@@ -8,7 +8,8 @@
     canvas.width=size;
 
     var context = canvas.getContext('2d');
-	context.lineWidth=8;
+	context.lineWidth=10;
+    context.strokeStyle = "#FF1493";
 
     // Touch events
     canvas.addEventListener('touchstart', function(e){
@@ -69,11 +70,13 @@ function getMousePos(canvas, evX, evY, size) {
     var rect = canvas.getBoundingClientRect();
     var drawX = evX - rect.left;
     var drawY = evY - rect.top;
+    var sendNaN = drawX < 0 || drawX > size/2 || drawY < 0 || drawY > size/2;
+    var sendX = sendNaN? NaN : Math.round(drawX-(size/2));
+    var sendY = sendNaN? NaN : Math.round(drawY-(size/2));
     return {
       drawX,
       drawY,
-      sendX: Math.round(drawX-(size/2)),
-      sendY: Math.round(drawY-(size/2))
-
+      sendX,
+      sendY
   };
 }
