@@ -8,7 +8,7 @@
     canvas.width=size;
 
     var context = canvas.getContext('2d');
-	context.lineWidth=10;
+    context.lineWidth=10;
     context.strokeStyle = "#FF1493";
 
     // Touch events
@@ -25,7 +25,7 @@
     	Server.send(coords.sendX, coords.sendY, 1);
 
     	context.lineTo(coords.drawX, coords.drawY);
-       	context.stroke();
+        context.stroke();
     }, false);    
 
     canvas.addEventListener('touchend', function(e){
@@ -53,10 +53,10 @@
     	Server.send(coords.sendX, coords.sendY, z);
 
     	if (mouseDown) {
-       	 context.lineTo(coords.drawX, coords.drawY);
-       	 context.stroke();
-      	}
-    }, false);    
+           context.lineTo(coords.drawX, coords.drawY);
+           context.stroke();
+       }
+   }, false);    
 
     canvas.addEventListener('mouseup', function(e){
     	coords = getMousePos(canvas, e.pageX, e.pageY, size);
@@ -66,7 +66,7 @@
 
 }, false);
 
-function getMousePos(canvas, evX, evY, size) {
+  function getMousePos(canvas, evX, evY, size) {
     var rect = canvas.getBoundingClientRect();
     var drawX = evX - rect.left;
     var drawY = evY - rect.top;
