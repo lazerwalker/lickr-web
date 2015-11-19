@@ -4,59 +4,14 @@
   <title>Lickr</title>
 
   <meta name="viewport" content="width=device-width,user-scalable=no">
-  <style> 
-    html {
-      height: 100%;
-      width: 100%;
-    }
-  
-    body {
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-
+  <link rel="stylesheet" type="text/css" href="style.css">
   <script src="websocket.js" type="text/javascript"></script>
 </head>
 <body>
-  <h1>Hello World</h1>
-
-  <script>
-  window.addEventListener('load', function() {
-    // Touch events
-    document.body.addEventListener('touchstart', function(e){
-      Server.send(e.pageX, e.pageY, 1);
-    }, false);
-
-    document.body.addEventListener('touchmove', function(e){
-      Server.send(e.pageX, e.pageY, 1);
-    }, false);    
-
-    document.body.addEventListener('touchend', function(e){
-      Server.send(e.pageX, e.pageY, 0);
-    }, false);
-
-
-    // Mouse events
-    // (Just for demonstrative purposes)
-    var mouseDown = false;
-
-    document.body.addEventListener('mousedown', function(e){
-      Server.send(e.pageX, e.pageY, 1);
-      mouseDown = true;
-    }, false);
-
-    document.body.addEventListener('mousemove', function(e){
-      var z = (mouseDown ? 1 : 0);
-      Server.send(e.pageX, e.pageY, z);
-    }, false);    
-
-    document.body.addEventListener('mouseup', function(e){
-      Server.send(e.pageX, e.pageY, 0);
-      mouseDown = false;
-    }, false);
-
-  }, false);
-  </script>
+  <div id="container">
+    <canvas id="myCanvas">
+    </canvas>
+  </div>
+  <script src="client.js" type="text/javascript"></script>
 </body>
 </html>
