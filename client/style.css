@@ -1,0 +1,22 @@
+    html {
+      height: 100%;
+      width: 100%;
+    }
+  
+    body {
+      height: 100%;
+      width: 100%;
+    }
+    #container {
+    	position: relative;
+    }
+    #myCanvas {
+    	-moz-border-radius: 50%;
+		-webkit-border-radius: 50%;
+		border-radius: 50%;
+		border: 1px solid #000;
+		margin: auto;
+  		position: absolute;
+  		top: 0; left: 0; right: 0;
+
+    }
