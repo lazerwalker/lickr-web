@@ -3,7 +3,7 @@
   	var canvas = document.getElementById("myCanvas");
     var height = self.innerHeight;
     var width = self.innerWidth;
-    var size = Math.min (height, width)*0.95;
+    var size = Math.min (height, width)*0.99;
     canvas.height=size;
     canvas.width=size;
 
@@ -12,24 +12,24 @@
 
     // Touch events
     canvas.addEventListener('touchstart', function(e){
-    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY);
-    	Server.send(coords.x, coords.y, 1);
+    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY, size);
+    	Server.send(coords.sendX, coords.sendY, 1);
 
     	context.beginPath();
-        context.moveTo(coords.x, coords.y);
+        context.moveTo(coords.drawX, coords.drawY);
     }, false);
 
     canvas.addEventListener('touchmove', function(e){
-    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY);
-    	Server.send(coords.x, coords.y, 1);
+    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY, size);
+    	Server.send(coords.sendX, coords.sendY, 1);
 
-    	context.lineTo(coords.x, coords.y);
+    	context.lineTo(coords.drawX, coords.drawY);
        	context.stroke();
     }, false);    
 
     canvas.addEventListener('touchend', function(e){
-    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY);
-    	Server.send(coords.x, coords.y, 0);
+    	coords = getMousePos(canvas, e.pageX, e.pageY, size);
+    	Server.send(coords.sendX, coords.sendY, 0);
     }, false);
 
 
@@ -38,37 +38,42 @@
     var mouseDown = false;
 
     canvas.addEventListener('mousedown', function(e){
-    	coords = getMousePos(canvas, e.pageX, e.pageY);
-    	Server.send(coords.x, coords.y, 1);
+    	coords = getMousePos(canvas, e.pageX, e.pageY, size);
+    	Server.send(coords.sendX, coords.sendY, 1);
     	mouseDown = true;
 
     	context.beginPath();
-        context.moveTo(coords.x, coords.y);
+        context.moveTo(coords.drawX, coords.drawY);
     }, false);
 
     canvas.addEventListener('mousemove', function(e){
-    	coords = getMousePos(canvas, e.pageX, e.pageY);
+    	coords = getMousePos(canvas, e.pageX, e.pageY, size);
     	var z = (mouseDown ? 1 : 0);
-    	Server.send(coords.x, coords.y, z);
+    	Server.send(coords.sendX, coords.sendY, z);
 
     	if (mouseDown) {
-       	 context.lineTo(coords.x, coords.y);
+       	 context.lineTo(coords.drawX, coords.drawY);
        	 context.stroke();
       	}
     }, false);    
 
     canvas.addEventListener('mouseup', function(e){
-    	coords = getMousePos(canvas, e.pageX, e.pageY);
-    	Server.send(coords.x, coords.y, 0);
+    	coords = getMousePos(canvas, e.pageX, e.pageY, size);
+    	Server.send(coords.sendX, coords.sendY, 0);
     	mouseDown = false;
     }, false);
 
 }, false);
 
-function getMousePos(canvas, evX, evY) {
+function getMousePos(canvas, evX, evY, size) {
     var rect = canvas.getBoundingClientRect();
+    var drawX = evX - rect.left;
+    var drawY = evY - rect.top;
     return {
-      x: evX - rect.left,
-      y: evY - rect.top
+      drawX,
+      drawY,
+      sendX: Math.round(drawX-(size/2)),
+      sendY: Math.round(drawY-(size/2))
+
   };
 }
