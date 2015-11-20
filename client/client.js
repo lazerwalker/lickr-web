@@ -38,6 +38,8 @@
 
     	context.lineTo(coords.drawX, coords.drawY);
         context.stroke();
+
+        e.preventDefault();
     }, false);    
 
     canvas.addEventListener('touchend', function(e){
