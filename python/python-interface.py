@@ -29,13 +29,16 @@ class LickrListener:
             return self.queue.pop(0) #TODO: very inefficient, maybe I should consider a different datastructure
         else:
             return None #nothing to return!
+            
+    def run_in_background(self):
+        thread = Thread(target = ll.run)
+        thread.start()
 
 if __name__ == "__main__":
     #TODO: main method here
     ll = LickrListener()
     ll.create_connection("ws://lickr.herokuapp.com:80")
-    thread = Thread(target = ll.run)
-    thread.start()
+    ll.run_in_background()
     
     while True:
         popped = ll.pop_queue()
