@@ -8,6 +8,12 @@ class LickrListener:
     ws = None
     queue = []
     
+    def __init__(self):
+        pass
+    
+    def __init__(self, uri):
+        self.create_connection(uri)
+    
     def create_connection(self, uri):
         self.ws = create_connection(uri)
         self.ws.send("machine")
@@ -36,8 +42,7 @@ class LickrListener:
 
 if __name__ == "__main__":
     #TODO: main method here
-    ll = LickrListener()
-    ll.create_connection("ws://lickr.herokuapp.com:80")
+    ll = LickrListener("ws://lickr.herokuapp.com:80")
     ll.run_in_background()
     
     while True:
