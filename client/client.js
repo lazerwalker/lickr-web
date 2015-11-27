@@ -1,6 +1,9 @@
+  // Cake diameter, taken from the fram drawings, used o normalize touch location.
+  const CAKE_DIAMETER = 254;
+  
   window.addEventListener('load', function() {
 
-  	var canvas = document.getElementById("myCanvas");
+    var canvas = document.getElementById("myCanvas");
     var height = self.innerHeight;
     var width = self.innerWidth;
     var size = Math.min (height, width)*0.99;
@@ -25,26 +28,26 @@
     // Touch events
 
     canvas.addEventListener('touchstart', function(e){
-    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY, size);
-    	sendPoint(coords.sendX, coords.sendY, 1);
+        coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY, size);
+        sendPoint(coords.sendX, coords.sendY, 1);
 
-    	context.beginPath();
+        context.beginPath();
         context.moveTo(coords.drawX, coords.drawY);
     }, false);
 
     canvas.addEventListener('touchmove', function(e){
-    	coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY, size);
-    	sendPoint(coords.sendX, coords.sendY, 1);
+        coords = getMousePos(canvas, e.touches[0].pageX, e.touches[0].pageY, size);
+        sendPoint(coords.sendX, coords.sendY, 1);
 
-    	context.lineTo(coords.drawX, coords.drawY);
+        context.lineTo(coords.drawX, coords.drawY);
         context.stroke();
 
         e.preventDefault();
     }, false);    
 
     canvas.addEventListener('touchend', function(e){
-    	coords = getMousePos(canvas, e.pageX, e.pageY, size);
-    	sendPoint(prevX, prevY, 0);
+        coords = getMousePos(canvas, e.pageX, e.pageY, size);
+        sendPoint(prevX, prevY, 0);
     }, false);
 
 
@@ -53,29 +56,29 @@
     var mouseDown = false;
 
     canvas.addEventListener('mousedown', function(e){
-    	coords = getMousePos(canvas, e.pageX, e.pageY, size);
-    	sendPoint(coords.sendX, coords.sendY, 1);
-    	mouseDown = true;
+        coords = getMousePos(canvas, e.pageX, e.pageY, size);
+        sendPoint(coords.sendX, coords.sendY, 1);
+        mouseDown = true;
 
-    	context.beginPath();
+        context.beginPath();
         context.moveTo(coords.drawX, coords.drawY);
     }, false);
 
     canvas.addEventListener('mousemove', function(e){
-    	coords = getMousePos(canvas, e.pageX, e.pageY, size);
-    	var z = (mouseDown ? 1 : 0);
-    	sendPoint(coords.sendX, coords.sendY, z);
+        coords = getMousePos(canvas, e.pageX, e.pageY, size);
+        var z = (mouseDown ? 1 : 0);
+        sendPoint(coords.sendX, coords.sendY, z);
 
-    	if (mouseDown) {
+        if (mouseDown) {
            context.lineTo(coords.drawX, coords.drawY);
            context.stroke();
        }
    }, false);    
 
     canvas.addEventListener('mouseup', function(e){
-    	coords = getMousePos(canvas, e.pageX, e.pageY, size);
-    	sendPoint(coords.sendX, coords.sendY, 0);
-    	mouseDown = false;
+        coords = getMousePos(canvas, e.pageX, e.pageY, size);
+        sendPoint(coords.sendX, coords.sendY, 0);
+        mouseDown = false;
     }, false);
 
 }, false);
@@ -85,8 +88,10 @@
     var drawX = evX - rect.left;
     var drawY = evY - rect.top;
     var sendNaN = drawX < 0 || drawX > size || drawY < 0 || drawY > size;
-    var sendX = sendNaN? NaN : Math.round(drawX-(size/2));
-    var sendY = sendNaN? NaN : Math.round(drawY-(size/2));
+    var sendX = sendNaN? NaN : Math.round(NormalizeNum(
+        -size/2, size/2, -CAKE_DIAMETER/2, CAKE_DIAMETER/2, drawX-(size/2)));
+    var sendY = sendNaN? NaN : Math.round(NormalizeNum(
+        -size/2, size/2, -CAKE_DIAMETER/2, CAKE_DIAMETER/2, drawY-(size/2)));
     return {
       drawX,
       drawY,
@@ -94,3 +99,15 @@
       sendY
   };
 }
+
+  function NormalizeNum (oldMin, oldMax, newMin, newMax, num) {
+    //Normalize to [0, 1]:
+     var range = oldMax - oldMin;
+     num = (num - oldMin) / range;
+
+    // Then scale to [newMin, newMax]:
+     var range2 = newMax - newMin;
+     var normalized = (num*range2) + newMin;
+     return normalized;
+ }
+
