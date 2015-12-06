@@ -10,15 +10,20 @@ class LickrListener:
     queue = []
     
     # length of arms
-    L = 10
+    L = 285 #mm
 
     # Delta Radius - distance from edge of end effector to point under center of carriage
-    DR = 10
+    DR = 190 #mm
 
     # distance the head extends below the effector (Length of tongue)
-    Hcz = 5
+    Hcz = 55
     
-    jog_height = 10
+    jog_height = 20 #raise or lower 2 cm
+    
+    PR = 128
+    
+    pix2mm = 190/125
+    
     
     def __init__(self):
         pass
@@ -57,9 +62,20 @@ class LickrListener:
     def translate_coordinates(self, coords):
     #Translates the coordinates from [x, y, z] to [A, B, C]
 
+        #First step: center them
         X = coords[0]
         Y = coords[1]
         Z = coords[2] * self.jog_height #coords[2] is 1 or 0, so this is jog_height or 0
+        
+        #Now, convert
+        X *= self.pix2mm
+        Y *= self.pix2mm
+        
+        print X
+        print Y
+        print Z
+        
+
         
         L = self.L
         DR = self.DR
