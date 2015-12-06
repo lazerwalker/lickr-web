@@ -24,6 +24,7 @@
             prevY = y;
         }
     }
+    var zeomMode = false;
 
     // Touch events
 

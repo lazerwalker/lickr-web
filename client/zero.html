@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Lickr - Zeroing</title>
+
+  <meta name="viewport" content="width=device-width,user-scalable=no">
+
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="websocket.js" type="text/javascript"></script>
+
+  <style> 
+    html {
+      height: 100%;
+      width: 100%;
+    }
+  
+    body {
+      height: 100%;
+      width: 100%;
+    }
+
+    table {
+      height: 100%;
+      width: 100%;
+      text-align: center;
+    }
+    td {
+      width: 33%;
+    }
+    tr {
+      height: 25%;
+    }
+  </style>
+
+</head>
+<body>
+<table>
+  <tr data-toggle="buttons">
+    <td> 
+      <label class="btn btn-lg btn-default"> <input class = "motor" name="motors" value="A" type='radio'> A</label> 
+    </td>
+    <td> 
+      <label class="btn btn-lg btn-default"> <input class = "motor"  name="motors" value="B" type='radio'> B</label> 
+    </td>
+        <td> 
+      <label class="btn btn-lg btn-default"> <input class = "motor"  name="motors" value="C" type='radio'> C</label> 
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><button class = "btn btn-lg btn-info" onClick="moveUp()"><i class="glyphicon glyphicon-arrow-up"></i></button></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><button class = "btn btn-lg btn-info" onClick="moveDown()"><i class="glyphicon glyphicon-arrow-down"></i></button></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td colspan="3" onClick="setZero()"><button class = "btn btn-block btn-warning btn-lg">set 0 </button></td>
+  </tr>
+</table>
+
+  <script>
+    var motor = "A";
+    $(".motor").change(function () {
+      motor = $('.motor:checked').val();
+    });
+    function moveUp() {
+      Server.send (motor, 'up');
+    }
+    function moveDown() {
+      Server.send (motor, 'down');
+    }
+    function setZero() {
+      Server.send ('zero');
+    }
+
+
+  </script>
+</body>
+</html>
