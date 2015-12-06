@@ -115,6 +115,25 @@ if __name__ == "__main__":
     ll.run_in_background()
     
     while True:
-        popped = ll.pop_queue()
-        if popped: #if it's not None
-            print popped
+        next = li.pop_queue()
+
+        if(next):
+            print next
+            # translation from queue format to array inverse kinematics
+            coords = translate_coordinates(next)
+            stages.move(coords, 0)
+            
+            # TODO: Figure out what the ideal way to poll for finishd status is. 
+            # In the xy_plotter example, the xAxisNode is the only one that is polled.
+            # Maybe the way the gestalt network works is there is only one output node
+            # for status checking?
+            statusX = stages.xAxisNode.spinStatusRequest()
+            statusY = stages.yAxisNode.spinStatusRequest()
+            statusZ = stages.zAxisNode.spinStatusRequest()
+
+            while(statusX['stepsRemaining'] > 0 || statusY['stepsRemaining'] > 0 || statusZ['stepsRemaining'] > 0):
+                time.sleep(0.001)
+                statusX = stages.xAxisNode.spinStatusRequest()   
+                statusY = stages.yAxisNode.spinStatusRequest()
+                statusZ = stages.zAxisNode.spinStatusRequest()
+
