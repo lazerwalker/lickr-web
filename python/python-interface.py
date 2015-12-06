@@ -13,7 +13,7 @@ class LickrListener:
     L = 285 #mm
 
     # Delta Radius - distance from edge of end effector to point under center of carriage
-    DR = 190 #mm
+    DR = 110 #mm
 
     # distance the head extends below the effector (Length of tongue)
     Hcz = 55
