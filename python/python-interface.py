@@ -24,6 +24,8 @@ class LickrListener:
     
     pix2mm = 190/125
     
+    down = True
+    
     
     def __init__(self):
         pass
@@ -44,7 +46,8 @@ class LickrListener:
             result = [ int(x) for x in result ]
             #convert it:
             result = self.translate_coordinates(result)
-            self.queue.append(result)
+            if result is not None:
+                self.queue.append(result)
     
     def close(self):    
         self.ws.close()
@@ -61,11 +64,28 @@ class LickrListener:
         
     def translate_coordinates(self, coords):
     #Translates the coordinates from [x, y, z] to [A, B, C]
-
         #First step: center them
         X = coords[0]
         Y = coords[1]
-        Z = coords[2] * self.jog_height #coords[2] is 1 or 0, so this is jog_height or 0
+        
+        Z = coords[2]
+        
+        Z = 1-Z #invert
+        
+        Z = Z * self.jog_height #coords[2] is 1 or 0, so this is jog_height or 0
+
+        if Z == 0 and self.down:
+            pass
+        elif Z > 0 and self.down:
+            self.down = False #jog up
+        elif Z == 0 and not self.down:
+            self.down = True #jog down
+        elif Z > 0 and not self.down:
+            return None
+            
+        
+
+        
         
         #Now, convert
         X *= self.pix2mm
