@@ -61,3 +61,32 @@ class virtualMachine(machines.virtualMachine):
 		#self.machineControl.pwmRequest(speedFraction)
 		pass
 
+#------IF RUN DIRECTLY FROM TERMINAL------
+if __name__ == '__main__':
+	# The persistence file remembers the node you set. It'll generate the first time you run the
+	# file. If you are hooking up a new node, delete the previous persistence file.
+	stages = virtualMachine(persistenceFile = "test.vmp")
+
+	# You can load a new program onto the nodes if you are so inclined. This is currently set to 
+	# the path to the 086-005 repository on Nadya's machine. 
+	#stages.xyNode.loadProgram('../../../086-005/086-005a.hex')
+	
+	# This is a widget for setting the potentiometer to set the motor current limit on the nodes.
+	# The A4982 has max 2A of current, running the widget will interactively help you set. 
+	#stages.xyNode.setMotorCurrent(0.7)
+
+	# This is for how fast the 
+	stages.abcNode.setVelocityRequest(8)	
+	
+	# Some random moves to test with
+	moves = [[10,10,10],[20,20,20],[10,10,10],[0,0,0]]
+	
+	# Move!
+	for move in moves:
+		stages.move(move, 0)
+		status = stages.aAxisNode.spinStatusRequest()
+		# This checks to see if the move is done.
+		while status['stepsRemaining'] > 0:
+			time.sleep(0.001)
+			status = stages.aAxisNode.spinStatusRequest()	
+	
