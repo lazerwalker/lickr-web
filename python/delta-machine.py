@@ -31,14 +31,14 @@ class virtualMachine(machines.virtualMachine):
 	
 	def initKinematics(self):
 		#TODO: is this correct?
-		self.aAxis = elements.elementChain.forward([elements.microstep.forward(4), elements.stepper.forward(1.8), elements.leadscrew.forward(8), elements.invert.forward(True)])
+		self.aAxis = elements.elementChain.forward([elements.microstep.forward(4), elements.stepper.forward(1.8), elements.leadscrew.forward(8), elements.invert.forward(False)])
 		self.bAxis = elements.elementChain.forward([elements.microstep.forward(4), elements.stepper.forward(1.8), elements.leadscrew.forward(8), elements.invert.forward(False)])
 		self.cAxis = elements.elementChain.forward([elements.microstep.forward(4), elements.stepper.forward(1.8), elements.leadscrew.forward(8), elements.invert.forward(False)])
 				
 		self.stageKinematics = kinematics.direct(3)	#direct drive on all axes
 	
 	def initFunctions(self):
-		self.move = functions.move(virtualMachine = self, virtualNode = self.xyNode, axes = [self.aAxis, self.bAxis, self.cAxis], kinematics = self.stageKinematics, machinePosition = self.position,planner = 'null')
+		self.move = functions.move(virtualMachine = self, virtualNode = self.abcNode, axes = [self.aAxis, self.bAxis, self.cAxis], kinematics = self.stageKinematics, machinePosition = self.position,planner = 'null')
 		self.jog = functions.jog(self.move)	#an incremental wrapper for the move function
 		pass
 		
