@@ -10,6 +10,7 @@ from pygestalt.utilities import notice
 from pygestalt.publish import rpc	#remote procedure call dispatcher
 import time
 import io
+import IPython
 
 
 #------VIRTUAL MACHINE------
@@ -25,6 +26,8 @@ class virtualMachine(machines.virtualMachine):
 		self.cAxisNode = nodes.networkedGestaltNode('C Axis', self.fabnet, filename = '086-005a.py', persistence = self.persistence)
 
 		self.abcNode = nodes.compoundNode(self.aAxisNode, self.bAxisNode, self.cAxisNode)
+		
+		#IPython.embed()
 
 	def initCoordinates(self):
 		self.position = state.coordinate(['mm', 'mm', 'mm'])

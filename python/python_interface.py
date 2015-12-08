@@ -3,6 +3,7 @@
 from websocket import create_connection
 from threading import Thread
 from numpy import sqrt
+from delta_machine import *
 
 class LickrListener:
 
@@ -91,9 +92,7 @@ class LickrListener:
         X *= self.pix2mm
         Y *= self.pix2mm
         
-        print X
-        print Y
-        print Z
+
         
 
         
@@ -111,29 +110,63 @@ class LickrListener:
 
 if __name__ == "__main__":
     #TODO: main method here
+    
+    stages = virtualMachine(persistenceFile = "test.vmp")
+
+	# You can load a new program onto the nodes if you are so inclined. This is currently set to 
+	# the path to the 086-005 repository on Nadya's machine. 
+	#stages.xyNode.loadProgram('../../../086-005/086-005a.hex')
+	
+	# This is a widget for setting the potentiometer to set the motor current limit on the nodes.
+	# The A4982 has max 2A of current, running the widget will interactively help you set. 
+	#stages.xyNode.setMotorCurrent(0.7)
+
+	# This is for how fast the 
+    stages.abcNode.setVelocityRequest(8)	
+	
+	# Some random moves to test with
+
+    
+    
+    
+	
+	# Move!
+    """
+    for move in moves:
+        stages.move(move, 0)
+        status = stages.aAxisNode.spinStatusRequest()
+		# This checks to see if the move is done.
+        while status['stepsRemaining'] > 0:
+            time.sleep(0.001)
+            status = stages.aAxisNode.spinStatusRequest()  
+    """  
+    
+    
+    
     ll = LickrListener("ws://lickr.herokuapp.com:80")
     ll.run_in_background()
     
     while True:
-        next = li.pop_queue()
+        next = ll.pop_queue()
 
         if(next):
             print next
             # translation from queue format to array inverse kinematics
-            coords = translate_coordinates(next)
+            coords = next
             stages.move(coords, 0)
             
             # TODO: Figure out what the ideal way to poll for finishd status is. 
             # In the xy_plotter example, the xAxisNode is the only one that is polled.
             # Maybe the way the gestalt network works is there is only one output node
             # for status checking?
-            statusX = stages.xAxisNode.spinStatusRequest()
-            statusY = stages.yAxisNode.spinStatusRequest()
-            statusZ = stages.zAxisNode.spinStatusRequest()
+            statusX = stages.aAxisNode.spinStatusRequest()
+            statusY = stages.bAxisNode.spinStatusRequest()
+            statusZ = stages.cAxisNode.spinStatusRequest()
 
-            while(statusX['stepsRemaining'] > 0 || statusY['stepsRemaining'] > 0 || statusZ['stepsRemaining'] > 0):
+            while(statusX['stepsRemaining'] > 0 or statusY['stepsRemaining'] > 0 or statusZ['stepsRemaining'] > 0):
                 time.sleep(0.001)
-                statusX = stages.xAxisNode.spinStatusRequest()   
-                statusY = stages.yAxisNode.spinStatusRequest()
-                statusZ = stages.zAxisNode.spinStatusRequest()
-
+                print statusX
+                statusX = stages.aAxisNode.spinStatusRequest()   
+                statusY = stages.bAxisNode.spinStatusRequest()
+                statusZ = stages.cAxisNode.spinStatusRequest()
+	
