@@ -82,7 +82,7 @@ if __name__ == '__main__':
 	stages.abcNode.setVelocityRequest(8)	
 	
 	# Some random moves to test with
-	moves = [[10,10,10],[20,20,20],[10,10,10],[0,0,0]]
+	moves = [[200,200,200]]
 	
 	# Move!
 	for move in moves:

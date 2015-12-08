@@ -21,9 +21,9 @@ class LickrListener:
     
     jog_height = 20 #raise or lower 2 cm
     
-    PR = 128
     
-    pix2mm = 190/125
+    #pix2mm = 190./125.
+    pix2mm = 1.0
     
     down = True
     
@@ -66,14 +66,17 @@ class LickrListener:
     def translate_coordinates(self, coords):
     #Translates the coordinates from [x, y, z] to [A, B, C]
         #First step: center them
+        
+
+        
         X = coords[0]
         Y = coords[1]
         
         Z = coords[2]
         
-        Z = 1-Z #invert
         
         Z = Z * self.jog_height #coords[2] is 1 or 0, so this is jog_height or 0
+
 
         if Z == 0 and self.down:
             pass
@@ -83,6 +86,7 @@ class LickrListener:
             self.down = True #jog down
         elif Z > 0 and not self.down:
             return None
+            #pass
             
         
 
@@ -102,9 +106,15 @@ class LickrListener:
 
         # A is the rode on the Y axis, B is 120 degrees clockwise from A, C is 120 degrees clockwise from 
         # X, Y ,Z are the input poin recieved from the user touch on the screen
-        Az = sqrt(pow(L, 2) - pow((X - 0), 2) - pow((Y - DR), 2)) + Z + Hcz
-        Bz = sqrt(pow(L, 2) - pow((X - DR*sqrt(3)/2), 2) - pow((Y + DR/2),2)) + Z + Hcz
-        Cz = sqrt(pow(L, 2) - pow((X + DR*sqrt(3)/2), 2) - pow((Y + DR/2),2)) + Z + Hcz
+        Az = sqrt(pow(L, 2) - pow((X - 0), 2) - pow((Y - DR), 2)) + Z - Hcz
+        Bz = sqrt(pow(L, 2) - pow((X - DR*sqrt(3)/2), 2) - pow((Y + DR/2),2)) + Z - Hcz
+        Cz = sqrt(pow(L, 2) - pow((X + DR*sqrt(3)/2), 2) - pow((Y + DR/2),2)) + Z - Hcz
+        
+        Az -= (207.91633650269813 / 2.0)
+        Bz -= (207.91633650269813 / 2.0)
+        Cz -= (207.91633650269813 / 2.0)
+        
+        print [Az, Bz, Cz]
         
         return [Az, Bz, Cz]
 
@@ -142,8 +152,8 @@ if __name__ == "__main__":
     """  
     
     
-    
     ll = LickrListener("ws://lickr.herokuapp.com:80")
+    
     ll.run_in_background()
     
     while True:
