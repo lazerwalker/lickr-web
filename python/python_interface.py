@@ -19,11 +19,11 @@ class LickrListener:
     # distance the head extends below the effector (Length of tongue)
     Hcz = 55
     
-    jog_height = 20 #raise or lower 2 cm
+    jog_height = 5 #raise or lower 2 cm
     
     
     #pix2mm = 190./125.
-    pix2mm = 1.0
+    pix2mm = 0.25
     
     down = True
     
@@ -110,9 +110,9 @@ class LickrListener:
         Bz = sqrt(pow(L, 2) - pow((X - DR*sqrt(3)/2), 2) - pow((Y + DR/2),2)) + Z - Hcz
         Cz = sqrt(pow(L, 2) - pow((X + DR*sqrt(3)/2), 2) - pow((Y + DR/2),2)) + Z - Hcz
         
-        Az -= (207.91633650269813)
-        Bz -= (207.91633650269813)
-        Cz -= (207.91633650269813)
+        Az -= (207.91633650269813 * 3.0/4.0)
+        Bz -= (207.91633650269813 * 3.0/4.0)
+        Cz -= (207.91633650269813 * 3.0/4.0)
         
         print [Az, Bz, Cz]
         
