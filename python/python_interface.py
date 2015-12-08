@@ -78,15 +78,15 @@ class LickrListener:
         Z = Z * self.jog_height #coords[2] is 1 or 0, so this is jog_height or 0
 
 
-        if Z == 0 and self.down:
+        if Z == 1 and self.down:
             pass
-        elif Z > 0 and self.down:
+        elif Z < 1 and self.down:
             self.down = False #jog up
-        elif Z == 0 and not self.down:
+        elif Z == 1 and not self.down:
             self.down = True #jog down
-        elif Z > 0 and not self.down:
-            return None
-            #pass
+        elif Z < 1 and not self.down:
+            #return None
+            pass
             
         
 
@@ -110,9 +110,9 @@ class LickrListener:
         Bz = sqrt(pow(L, 2) - pow((X - DR*sqrt(3)/2), 2) - pow((Y + DR/2),2)) + Z - Hcz
         Cz = sqrt(pow(L, 2) - pow((X + DR*sqrt(3)/2), 2) - pow((Y + DR/2),2)) + Z - Hcz
         
-        Az -= (207.91633650269813 / 2.0)
-        Bz -= (207.91633650269813 / 2.0)
-        Cz -= (207.91633650269813 / 2.0)
+        Az -= (207.91633650269813)
+        Bz -= (207.91633650269813)
+        Cz -= (207.91633650269813)
         
         print [Az, Bz, Cz]
         
@@ -160,7 +160,7 @@ if __name__ == "__main__":
         next = ll.pop_queue()
 
         if(next):
-            print next
+
             # translation from queue format to array inverse kinematics
             coords = next
             stages.move(coords, 0)
@@ -175,7 +175,6 @@ if __name__ == "__main__":
 
             while(statusX['stepsRemaining'] > 0 or statusY['stepsRemaining'] > 0 or statusZ['stepsRemaining'] > 0):
                 time.sleep(0.001)
-                print statusX
                 statusX = stages.aAxisNode.spinStatusRequest()   
                 statusY = stages.bAxisNode.spinStatusRequest()
                 statusZ = stages.cAxisNode.spinStatusRequest()
